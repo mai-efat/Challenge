@@ -1,46 +1,44 @@
-name: SonarCloud Scan
+name: SonarQube Scan
 
 on:
-  workflow_dispatch:
-    inputs:
-      branch:
-        description: 'Branch to analyze'
-        required: true
-        default: 'main'
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
-  sonarqube:
-    name: SonarCloud Scan
+  sonar:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
+    - name: Checkout code
+      uses: actions/checkout@v3
 
-      - name: Set up JDK 17
-        uses: actions/setup-java@v3
-        with:
-          java-version: '17'
-          distribution: 'temurin'   # Another valid distribution option
+    - name: Set JAVA_HOME to Java 17
+      run: |
+        echo "Setting JAVA_HOME to Java 17"
+        export JAVA_HOME=/opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.14-7/x64
+        export PATH=$JAVA_HOME/bin:$PATH
+        echo "JAVA_HOME is set to: $JAVA_HOME"
 
+    - name: Set SONAR_TOKEN as secret
+      run: echo "SONAR_TOKEN=${{ secrets.SONAR_TOKEN }}" >> $GITHUB_ENV
 
-      - name: Verify Java Version
-        run: java -version  # This will show the version of Java being used
-
-      - name: Set JAVA_HOME explicitly
-        run: echo "JAVA_HOME=/opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.14-7/x64" >> $GITHUB_ENV 
-
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@v1
-        with:
-          args: |
-            -Dsonar.projectKey=Mai_EFAT
-            -Dsonar.projectName=jenkins-demo
-            -Dsonar.branch.name=${{ github.event.inputs.branch }}
-        env:
-          JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.14-7/x64  # Ensuring SonarScanner uses the correct JDK
-
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+    - name: Run SonarScanner inside Docker with Java 17
+      run: |
+        docker run --name sonarscanner_container --rm \
+          -e "JAVA_HOME=/opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.14-7/x64" \
+          -e "SONAR_TOKEN=${{ secrets.SONAR_TOKEN }}" \
+          -e "INPUT_ARGS" \
+          -e "INPUT_PROJECTBASEDIR=." \
+          -v "$GITHUB_WORKSPACE:/github/workspace" \
+          openjdk:17 \
+          bash -c "sonar-scanner \
+            -Dsonar.projectKey=Mai_EFAT \
+            -Dsonar.projectName=jenkins-demo \
+            -Dsonar.branch.name=main"
 
 
 
