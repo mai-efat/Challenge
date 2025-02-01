@@ -7,7 +7,7 @@ on:
         description: 'Branch to analyze'
         required: true
         default: 'main'
-
+ 
 jobs:
   sonarqube:
     name: SonarCloud Scan
@@ -16,7 +16,10 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
-        
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'   
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v1
         with:
@@ -26,7 +29,7 @@ jobs:
             -Dsonar.branch.name=${{ github.event.inputs.branch }}  
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}  
-
+     
 
     # # Step 3: Run Trivy vulnerability scan for Docker image
     # - name: Install Trivy and run vulnerability scan
