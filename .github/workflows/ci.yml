@@ -21,9 +21,9 @@ jobs:
         uses: SonarSource/sonarcloud-github-action@v1
         with:
           args: |
-            -Dsonar.projectKey=Mai_EFAT          # Project Key
-            -Dsonar.projectName=jenkins-demo     # Project Name
-            -Dsonar.branch.name=${{ github.event.inputs.branch }}  # Branch to analyze
+            -Dsonar.projectKey=Mai_EFAT          
+            -Dsonar.projectName=jenkins-demo     
+            -Dsonar.branch.name=${{ github.event.inputs.branch }}  
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}  # Set the token in the environment variable
 
