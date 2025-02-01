@@ -1,7 +1,5 @@
 name: SonarCloud Scan
 
-
-
 on:
   workflow_dispatch:
     inputs:
@@ -30,17 +28,13 @@ jobs:
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v1
         with:
-          entryPoint: 'sonar-scanner'  # Specify the entry point for the scanner
           args: |
             -Dsonar.projectKey=Mai_EFAT
             -Dsonar.projectName=jenkins-demo
             -Dsonar.branch.name=${{ github.event.inputs.branch }}
-          distribution: 'sonar-scanner' 
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
-
-     
 
     # # Step 3: Run Trivy vulnerability scan for Docker image
     # - name: Install Trivy and run vulnerability scan
