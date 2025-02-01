@@ -26,7 +26,8 @@ jobs:
           args: |
             -Dsonar.projectKey=Mai_EFAT          
             -Dsonar.projectName=jenkins-demo     
-            -Dsonar.branch.name=${{ github.event.inputs.branch }}  
+            -Dsonar.branch.name=${{ github.event.inputs.branch }} 
+             distribution: "sonar-scanner" 
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}  
      
