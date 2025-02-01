@@ -21,6 +21,8 @@ jobs:
         uses: actions/setup-java@v3
         with:
           java-version: '17'
+          distribution: 'openjdk'   # Another valid distribution option
+
 
       - name: Verify Java Version
         run: java -version  # This will show the version of Java being used
