@@ -38,9 +38,10 @@ jobs:
             -Dsonar.projectName=jenkins-demo
             -Dsonar.branch.name=${{ github.event.inputs.branch }}
         env:
+          JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.14-7/x64  # Ensuring SonarScanner uses the correct JDK
+
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
-          JAVA_HOME: /opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.14-7/x64  # Ensuring SonarScanner uses the correct JDK
 
 
     # # Step 3: Run Trivy vulnerability scan for Docker image
