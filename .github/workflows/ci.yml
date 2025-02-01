@@ -17,6 +17,8 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
+      - name: Verify Java Version
+        run: java -version  
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v1
