@@ -1,3 +1,6 @@
+name: SonarCloud Scan
+
+
 on:
   workflow_dispatch:
     inputs:
@@ -24,7 +27,7 @@ jobs:
         uses: SonarSource/sonarcloud-github-action@v1
         with:
           args: "-Dsonar.projectKey=Mai_EFAT -Dsonar.projectName=jenkins-demo -Dsonar.branch.name=${{ github.event.inputs.branch }}"
-          distribution: "sonar-scanner"  # Add this line to specify the distribution
+          distribution: "sonar-scanner" 
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
