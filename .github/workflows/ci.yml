@@ -25,7 +25,7 @@ jobs:
             -Dsonar.projectName=jenkins-demo     
             -Dsonar.branch.name=${{ github.event.inputs.branch }}  
         env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}  # Set the token in the environment variable
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}  
 
 
     # # Step 3: Run Trivy vulnerability scan for Docker image
