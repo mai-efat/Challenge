@@ -1,6 +1,7 @@
 name: SonarCloud Scan
 
 
+
 on:
   workflow_dispatch:
     inputs:
@@ -17,25 +18,27 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+
       - name: Verify Java Version
-        run: java -version  
-        
-    
+        run: java -version  # This will show the version of Java being used
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v1
         with:
-          projectKey: Mai_EFAT
-          projectName: jenkins-demo
-          branch: ${{ github.event.inputs.branch }}
-          distribution: 'sonar-scanner-cli' 
-  
+          entryPoint: 'sonar-scanner'  # Specify the entry point for the scanner
+          args: |
+            -Dsonar.projectKey=Mai_EFAT
+            -Dsonar.projectName=jenkins-demo
+            -Dsonar.branch.name=${{ github.event.inputs.branch }}
+          distribution: 'sonar-scanner' 
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      - name: Set up JDK 17
-        uses: actions/setup-java@v3
-        with:
-          java-version: '17' 
+
 
      
 
