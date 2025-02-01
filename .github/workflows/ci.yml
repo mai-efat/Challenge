@@ -27,6 +27,9 @@ jobs:
       - name: Verify Java Version
         run: java -version  # This will show the version of Java being used
 
+      - name: Set JAVA_HOME explicitly
+        run: echo "JAVA_HOME=/opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.14-7/x64" >> $GITHUB_ENV 
+
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v1
         with:
