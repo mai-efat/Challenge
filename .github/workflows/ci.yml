@@ -31,7 +31,7 @@ jobs:
           projectKey: Mai_EFAT
           projectName: jenkins-demo
           branch: ${{ github.event.inputs.branch }}
-          distribution: 'sonar-scanner'  # Specify the distribution explicitly
+  
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
