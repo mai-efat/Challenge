@@ -21,7 +21,7 @@ jobs:
         uses: actions/setup-java@v3
         with:
           java-version: '17'
-          distribution: 'adoptopenjdk'   # Another valid distribution option
+          distribution: 'temurin'   # Another valid distribution option
 
 
       - name: Verify Java Version
