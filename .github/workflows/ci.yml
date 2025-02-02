@@ -1,4 +1,4 @@
-name: SonarQube Scan
+name: SonarCloud Scan
 
 on:
   push:
@@ -9,11 +9,11 @@ on:
       - main
 
 jobs:
-  sonar:
-    runs-on: ubuntu-latest
+  sonarcloud:
+    runs-on: ubuntu-latest  # You can use ubuntu-latest or any other environment
 
     steps:
-    - name: Checkout code
+    - name: Checkout Code
       uses: actions/checkout@v3
 
     - name: Set JAVA_HOME to Java 17
@@ -23,23 +23,24 @@ jobs:
         export PATH=$JAVA_HOME/bin:$PATH
         echo "JAVA_HOME is set to: $JAVA_HOME"
 
+    - name: Cache Maven dependencies
+      uses: actions/cache@v3
+      with:
+        path: ~/.m2/repository
+        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+        restore-keys: |
+          ${{ runner.os }}-maven-
+
     - name: Set SONAR_TOKEN as secret
       run: echo "SONAR_TOKEN=${{ secrets.SONAR_TOKEN }}" >> $GITHUB_ENV
 
-    - name: Run SonarScanner inside Docker with Java 17
-      run: |
-        docker run --name sonarscanner_container --rm \
-          -e "JAVA_HOME=/opt/hostedtoolcache/Java_Temurin-Hotspot_jdk/17.0.14-7/x64" \
-          -e "SONAR_TOKEN=${{ secrets.SONAR_TOKEN }}" \
-          -e "INPUT_ARGS" \
-          -e "INPUT_PROJECTBASEDIR=." \
-          -v "$GITHUB_WORKSPACE:/github/workspace" \
-          openjdk:17 \
-          bash -c "sonar-scanner \
-            -Dsonar.projectKey=Mai_EFAT \
-            -Dsonar.projectName=jenkins-demo \
-            -Dsonar.branch.name=main"
-
+    - name: Run Maven SonarScanner
+      run: mvn clean verify sonar:sonar \
+        -Dsonar.projectKey=Mai_EFAT \
+        -Dsonar.projectName=jenkins-demo \
+        -Dsonar.branch.name=${{ github.head_ref || github.ref_name }} \
+        -Dsonar.host.url=https://sonarcloud.io \
+        -Dsonar.login=${{ secrets.SONAR_TOKEN }}
 
 
     # # Step 3: Run Trivy vulnerability scan for Docker image
